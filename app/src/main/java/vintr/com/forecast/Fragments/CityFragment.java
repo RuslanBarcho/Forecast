@@ -31,9 +31,7 @@ public class CityFragment extends Fragment {
     RecyclerView weatherByDayView;
     WeatherByDayAdapter weatherByDayAdapter;
 
-    public CityFragment() {
-        // Required empty public constructor
-    }
+    public CityFragment() { }
 
     public static CityFragment newInstance() {
         return new CityFragment();
@@ -49,9 +47,8 @@ public class CityFragment extends Fragment {
             weatherByTimes.add(new WeatherByTime("9:00", String.valueOf(i)));
         }
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         weatherByTimeView = mRootView.findViewById(R.id.weatherByTimeView);
-        weatherByTimeView.setLayoutManager(layoutManager);
+        weatherByTimeView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         weatherByTimeAdapter = new WeatherByTimeAdapter(weatherByTimes);
         weatherByTimeView.setAdapter(weatherByTimeAdapter);
 
@@ -60,12 +57,11 @@ public class CityFragment extends Fragment {
         }
 
         weatherByDayView = mRootView.findViewById(R.id.weatherByDayView);
-        weatherByDayView.setLayoutManager(new LinearLayoutManager(getContext()));
+        weatherByDayView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         weatherByDayAdapter = new WeatherByDayAdapter(weatherByDays);
         weatherByDayView.setAdapter(weatherByDayAdapter);
 
-
-        Toast.makeText(getContext(), String.valueOf(getArguments().getInt("position")), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getContext(), String.valueOf(getArguments().getInt("position")), Toast.LENGTH_SHORT).show();
         return mRootView;
     }
 }
