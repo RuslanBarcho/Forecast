@@ -11,7 +11,9 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import vintr.com.forecast.Adapters.WeatherByDayAdapter;
 import vintr.com.forecast.Adapters.WeatherByTimeAdapter;
+import vintr.com.forecast.Models.WeatherByDay;
 import vintr.com.forecast.Models.WeatherByTime;
 import vintr.com.forecast.R;
 
@@ -22,9 +24,12 @@ import vintr.com.forecast.R;
 // comment
 public class CityFragment extends Fragment {
     ArrayList<WeatherByTime> weatherByTimes = new ArrayList<>();
+    ArrayList<WeatherByDay> weatherByDays = new ArrayList<>();
     View mRootView;
     RecyclerView weatherByTimeView;
     WeatherByTimeAdapter weatherByTimeAdapter;
+    RecyclerView weatherByDayView;
+    WeatherByDayAdapter weatherByDayAdapter;
 
     public CityFragment() {
         // Required empty public constructor
@@ -49,6 +54,16 @@ public class CityFragment extends Fragment {
         weatherByTimeView.setLayoutManager(layoutManager);
         weatherByTimeAdapter = new WeatherByTimeAdapter(weatherByTimes);
         weatherByTimeView.setAdapter(weatherByTimeAdapter);
+
+        for(int i = 0; i<7; i++){
+            weatherByDays.add(new WeatherByDay("Суббота", String.valueOf(i), String.valueOf(i+1)));
+        }
+
+        weatherByDayView = mRootView.findViewById(R.id.weatherByDayView);
+        weatherByDayView.setLayoutManager(new LinearLayoutManager(getContext()));
+        weatherByDayAdapter = new WeatherByDayAdapter(weatherByDays);
+        weatherByDayView.setAdapter(weatherByDayAdapter);
+
 
         Toast.makeText(getContext(), String.valueOf(getArguments().getInt("position")), Toast.LENGTH_SHORT).show();
         return mRootView;
