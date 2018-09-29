@@ -18,6 +18,8 @@ import vintr.com.forecast.R;
 /**
  * A simple {@link Fragment} subclass.
  */
+
+// comment
 public class CityFragment extends Fragment {
     ArrayList<WeatherByTime> weatherByTimes = new ArrayList<>();
     View mRootView;
