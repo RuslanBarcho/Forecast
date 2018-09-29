@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Fragments.CityFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="32dp"
+        android:layout_marginTop="16dp"
+        android:text="5°"
+        android:textColor="@color/colorAccent"
+        android:textSize="96sp"
+        android:textStyle="bold" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/weatherByTimeView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/textView4" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/textView"
+        android:layout_below="@+id/textView"
+        android:layout_marginBottom="24dp"
+        android:text="Пятница"
+        android:textColor="@color/colorAccent"
+        android:textSize="18sp" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="38dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="47dp"
+        android:layout_toEndOf="@+id/textView"
+        android:background="@drawable/black_ripple"
+        android:drawableRight="@drawable/ic_dropdown"
+        android:gravity="center_vertical|center_horizontal|center"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:text="Москва  "
+        android:textAllCaps="false"
+        android:textColor="@android:color/background_light"
+        android:textSize="24sp" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/weatherByWeek"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/weatherByTimeView" />
+
+</RelativeLayout>
