@@ -7,10 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
-import java.util.ArrayList;
-
 import vintr.com.forecast.Adapters.DynamicFragmentAdapter;
-import vintr.com.forecast.Models.WeatherByTime;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -55,10 +52,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        addFragmentToViewPager(2);
+        addFragmentToViewPager(1);
         DynamicFragmentAdapter mDynamicFragmentAdapter = new DynamicFragmentAdapter(getSupportFragmentManager(), mTabLayout.getTabCount());
         mFragmentViewPager.setAdapter(mDynamicFragmentAdapter);
         mFragmentViewPager.setCurrentItem(0);
+
+
     }
 
     private void addFragmentToViewPager(int count){

@@ -8,7 +8,7 @@
     <!-- TODO: Update blank fragment layout -->
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/temperature_city"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="32dp"
@@ -30,8 +30,8 @@
         android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/textView"
-        android:layout_below="@+id/textView"
+        android:layout_alignStart="@+id/temperature_city"
+        android:layout_below="@+id/temperature_city"
         android:layout_marginBottom="24dp"
         android:text="Пятница"
         android:textColor="@color/colorAccent"
@@ -44,7 +44,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="47dp"
-        android:layout_toEndOf="@+id/textView"
+        android:layout_toEndOf="@+id/temperature_city"
         android:background="@drawable/black_ripple"
         android:drawableRight="@drawable/ic_dropdown"
         android:gravity="center_vertical|center_horizontal|center"
