@@ -56,8 +56,6 @@ public class MainActivity extends AppCompatActivity {
         DynamicFragmentAdapter mDynamicFragmentAdapter = new DynamicFragmentAdapter(getSupportFragmentManager(), mTabLayout.getTabCount());
         mFragmentViewPager.setAdapter(mDynamicFragmentAdapter);
         mFragmentViewPager.setCurrentItem(0);
-
-
     }
 
     private void addFragmentToViewPager(int count){

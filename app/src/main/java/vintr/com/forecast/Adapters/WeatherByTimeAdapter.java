@@ -5,7 +5,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -51,5 +50,9 @@ public class WeatherByTimeAdapter extends RecyclerView.Adapter<WeatherByTimeAdap
             time = itemView.findViewById(R.id.time);
             temperature = itemView.findViewById(R.id.temperature);
         }
+    }
+
+    public void updateInfo(ArrayList<WeatherByTime> items){
+        this.items = items;
     }
 }
