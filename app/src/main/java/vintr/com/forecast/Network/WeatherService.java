@@ -14,6 +14,13 @@ public interface WeatherService {
             @Query("APPID") String APPID
     );
 
+    @GET("weather?")
+    Observable<InformationHolder> getCurWeather(
+            @Query("lat") String lat,
+            @Query("lon") String lon,
+            @Query("APPID") String APPID
+    );
+
     @GET("forecast?")
     Single<FiveDaysHolder> getFiveDaysWeather(
             @Query("q") String location,

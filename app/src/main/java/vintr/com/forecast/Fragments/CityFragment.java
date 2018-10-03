@@ -72,7 +72,7 @@ public class CityFragment extends Fragment {
         configureRecyclerview(weatherByDayView, weatherByDayAdapter, new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
 
         APIWrapper apiWrapper = new APIWrapper();
-        apiWrapper.getCurrentWeather(new DisposableObserver<InformationHolder>() {
+        apiWrapper.getCurrentWeather("Moscow,ru", new DisposableObserver<InformationHolder>() {
             @Override
             public void onNext(InformationHolder informationHolder) {
                 Double a = informationHolder.getMain().getTemp() - 273.15;
@@ -114,7 +114,7 @@ public class CityFragment extends Fragment {
                 weatherByTimes.clear();
                 weatherByTimes.addAll(newWeatherData);
                 updateHoursRecycler();
-                Log.i("Retrofit", "Done!");
+                //Log.i("Retrofit", "Done!");
             }
         });
         //Toast.makeText(getContext(), String.valueOf(getArguments().getInt("position")), Toast.LENGTH_SHORT).show();
