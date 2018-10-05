@@ -15,7 +15,7 @@ import vintr.com.forecast.Network.FiveDaysWeatherModels.FiveDaysList;
 public class APIWrapper {
 
     @SuppressLint("CheckResult")
-    private void getWeatherObservable(String city, String lat, String lon, DisposableObserver<InformationHolder> observer) {
+    public void getWeatherObservable(String city, String lat, String lon, DisposableObserver<InformationHolder> observer) {
         Observable weatherObservable = Observable.empty();
         if (city != null) weatherObservable = NetworkSingleton.getRetrofit().create(WeatherService.class).getCurWeather(city, "cbe768adbe16ad6ce8c15294944172ac");
         else if (lat != null & lon != null) weatherObservable =  NetworkSingleton.getRetrofit().create(WeatherService.class).getCurWeather(lat, lon , "cbe768adbe16ad6ce8c15294944172ac");
