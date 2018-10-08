@@ -3,6 +3,15 @@ package vintr.com.forecast.Models;
 public class WeatherByTime {
     private String time;
     private String temperature;
+    private String type;
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 
     public String getTime() {
         return time;
@@ -20,8 +29,9 @@ public class WeatherByTime {
         this.temperature = temperature;
     }
 
-    public WeatherByTime(String time, String temperature) {
+    public WeatherByTime(String time, String temperature, String type) {
         this.time = time;
         this.temperature = temperature;
+        this.type = type;
     }
 }

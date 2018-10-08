@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -33,6 +34,17 @@ public class WeatherByTimeAdapter extends RecyclerView.Adapter<WeatherByTimeAdap
 
         holder.time.setText(items.get(position).getTime());
         holder.temperature.setText(items.get(position).getTemperature());
+        switch (items.get(position).getType()){
+            case "Rain":
+                holder.icon.setImageResource(R.drawable.ic_rain);
+                break;
+            case "Clear":
+                holder.icon.setImageResource(R.drawable.ic_clear);
+                break;
+                default:
+                    holder.icon.setImageResource(R.drawable.ic_partly_cloudy);
+                    break;
+        }
     }
 
     @Override
@@ -44,11 +56,13 @@ public class WeatherByTimeAdapter extends RecyclerView.Adapter<WeatherByTimeAdap
 
         public TextView time;
         public TextView temperature;
+        public ImageView icon;
 
         public WeatherByTimeViewHolder(View itemView) {
             super(itemView);
             time = itemView.findViewById(R.id.time);
             temperature = itemView.findViewById(R.id.temperature);
+            icon = itemView.findViewById(R.id.weather_by_time_icon);
         }
     }
 

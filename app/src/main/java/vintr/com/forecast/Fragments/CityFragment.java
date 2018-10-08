@@ -1,34 +1,42 @@
 package vintr.com.forecast.Fragments;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.tbruyelle.rxpermissions2.RxPermissions;
 
+import java.text.SimpleDateFormat;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DisposableObserver;
 import vintr.com.forecast.Adapters.WeatherByDayAdapter;
 import vintr.com.forecast.Adapters.WeatherByTimeAdapter;
+import vintr.com.forecast.Helpers.GridItemDecoration;
+import vintr.com.forecast.Helpers.ImageHelper;
 import vintr.com.forecast.Models.WeatherByDay;
 import vintr.com.forecast.Models.WeatherByTime;
 import vintr.com.forecast.Network.APIWrapper;
@@ -43,17 +51,17 @@ import vintr.com.forecast.R;
 // comment
 public class CityFragment extends Fragment {
     ArrayList<WeatherByTime> weatherByTimes = new ArrayList<>();
-    ArrayList<WeatherByDay> weatherByDays = new ArrayList<>();
     View mRootView;
     RecyclerView weatherByTimeView;
     WeatherByTimeAdapter weatherByTimeAdapter;
-    RecyclerView weatherByDayView;
-    WeatherByDayAdapter weatherByDayAdapter;
     LocationManager locationManager;
     APIWrapper apiWrapper;
+    ImageView currentWeatherCardBackground;
 
     TextView temperature;
-    Button cityName;
+    TextView cityName;
+    TextView weatherType;
+    TextView dayName;
 
     public CityFragment() { }
 
@@ -63,7 +71,7 @@ public class CityFragment extends Fragment {
 
     @SuppressLint("CheckResult")
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         mRootView = inflater.inflate(R.layout.fragment_city, container, false);
@@ -71,35 +79,52 @@ public class CityFragment extends Fragment {
 
         temperature = mRootView.findViewById(R.id.temperature_city);
         cityName = mRootView.findViewById(R.id.city_name);
+        dayName = mRootView.findViewById(R.id.day_name);
+        weatherType = mRootView.findViewById(R.id.weather_type);
+        currentWeatherCardBackground = mRootView.findViewById(R.id.current_weather_card_background);
+
+        Calendar calendar = Calendar.getInstance();
+        Date date = calendar.getTime();
+        dayName.setText(new SimpleDateFormat("EEEE, d MMMM", Locale.ENGLISH).format(date.getTime()));
 
         locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-
-        //Log.i("CITY:", getArguments().getString("city"));
 
         if ((ContextCompat.checkSelfPermission( getContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION ) != PackageManager.PERMISSION_GRANTED) & !(getArguments().getString("city").equals("Location"))) {
             Log.i("CITY:", "Downloading Cur w data");
             getCurWeather(getArguments().getString("city"), null, null);
         } else {
-            Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            getCurWeather(null, String.valueOf(location.getLatitude()), String.valueOf(location.getLongitude()));
-            Log.i("CITY COORDS", String.valueOf(location.getLatitude()) + " " + String.valueOf(location.getLongitude()));
+            locationManager.requestSingleUpdate(LocationManager.NETWORK_PROVIDER, new LocationListener(){
+                @Override
+                public void onLocationChanged(Location location) {
+                    getCurWeather(null, String.valueOf(location.getLatitude()), String.valueOf(location.getLongitude()));
+                }
+
+                @Override
+                public void onStatusChanged(String s, int i, Bundle bundle) {
+                }
+
+                @Override
+                public void onProviderDisabled(String s) {
+
+                }
+
+                @Override
+                public void onProviderEnabled(String s) {
+
+                }
+            }, null);
+            //Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
         }
 
-        for(int i = 0; i<24; i++){
-            weatherByTimes.add(new WeatherByTime("9:00", String.valueOf(i)));
+        for(int i = 0; i<10; i++){
+            weatherByTimes.add(new WeatherByTime("9:00", String.valueOf(i), "Clear"));
         }
 
         weatherByTimeView = mRootView.findViewById(R.id.weatherByTimeView);
         weatherByTimeAdapter = new WeatherByTimeAdapter(weatherByTimes);
-        configureRecyclerview(weatherByTimeView,weatherByTimeAdapter, new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
-
-        for(int i = 0; i<7; i++){
-            weatherByDays.add(new WeatherByDay("Суббота", String.valueOf(i), String.valueOf(i+1)));
-        }
-
-        weatherByDayView = mRootView.findViewById(R.id.weatherByDayView);
-        weatherByDayAdapter = new WeatherByDayAdapter(weatherByDays);
-        configureRecyclerview(weatherByDayView, weatherByDayAdapter, new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+        weatherByTimeView.addItemDecoration(new GridItemDecoration(getContext(), R.dimen.item_offset));
+        configureRecyclerView(weatherByTimeView,weatherByTimeAdapter, new GridLayoutManager(getContext(), 2));
 
         apiWrapper.getFiveDaysWeather(new Observer<FiveDaysList>() {
             ArrayList<WeatherByTime> newWeatherData = new ArrayList<>();
@@ -112,7 +137,7 @@ public class CityFragment extends Fragment {
             public void onNext(FiveDaysList fiveDaysList) {
                 Double a = fiveDaysList.getMain().getTemp() - 273.15;
                 //Date date = new Date(fiveDaysList.getDt());
-                newWeatherData.add(new WeatherByTime(fiveDaysList.getDtTxt().substring(11,16),String.valueOf(a.intValue())));
+                newWeatherData.add(new WeatherByTime(fiveDaysList.getDtTxt().substring(11,16),String.valueOf(a.intValue()) + "°", fiveDaysList.getWeather().get(0).getMain()));
             }
 
             @Override
@@ -127,7 +152,6 @@ public class CityFragment extends Fragment {
                 updateHoursRecycler();
             }
         });
-        //Toast.makeText(getContext(), String.valueOf(getArguments().getInt("position")), Toast.LENGTH_SHORT).show();
         return mRootView;
     }
 
@@ -136,8 +160,11 @@ public class CityFragment extends Fragment {
             @Override
             public void onNext(InformationHolder informationHolder) {
                 Double a = informationHolder.getMain().getTemp() - 273.15;
+                String type = informationHolder.getWeather().get(0).getMain();
                 temperature.setText(String.valueOf(a.intValue()) + "°");
+                weatherType.setText(type);
                 cityName.setText(informationHolder.getName());
+                currentWeatherCardBackground.setImageResource(new ImageHelper().getBackgroundImage(type));
                 Log.i("CITY DOWNLOADED", informationHolder.getName());
             }
 
@@ -158,7 +185,7 @@ public class CityFragment extends Fragment {
         weatherByTimeAdapter.notifyDataSetChanged();
     }
 
-    private void configureRecyclerview(RecyclerView recyclerView, RecyclerView.Adapter adapter, RecyclerView.LayoutManager manager){
+    private void configureRecyclerView(RecyclerView recyclerView, RecyclerView.Adapter adapter, RecyclerView.LayoutManager manager){
         recyclerView.setLayoutManager(manager);
         recyclerView.setAdapter(adapter);
     }
